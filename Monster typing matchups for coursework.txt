@@ -1,0 +1,10 @@
+Monster Type  /	 Effective Against   /   Weak Against	
+
+Fire:
+Water:
+Electric:	
+Ghost:
+Dragon:
+Normal:
+Fighting:
+	
