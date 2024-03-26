@@ -11,39 +11,24 @@ class Monster {
     string Name;
     string Type;
     int Health;
-    string moves[4];
   public:
-    Monster(string N, string T, int H, string M) {
+    Monster(string N, string T, int H) {
       Name = N;
       Type = T;
       Health = H;
-      moves[3] = M;
     }
-    string GetMoves() {
-      return moves[3];
-    }
-
 };  
-
 int GenerateNumber(short min, short max) {
   srand(time(0));
   short RanNum = (rand()%(max - min + 1)) + min;
   return RanNum;
 }
-
-
-
-
-
-
-
-
 void Battle() {
   int NumberOfMonsters;
+  int BattleType;
   string SelectedMonster;
   string MonsterTeam[] = {};
-  Monster Pikachu("Pikachu","Electric",100,{"Thunderbolt","Shock"});
-  //MonsterDictionary["Pikachu"] = Pikachu, MonsterDictionary["Charizard"] = Charizard, MonsterDictionary["Dragonite"] = Dragonite;
+  Monster Pikachu("Pikachu","Electric",100);
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -60,11 +45,25 @@ void Battle() {
     } 
   }
   while (NumberOfMonsters > 0) {
-    cout<<"Select a Monster to fight with!\n";
+    cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     NumberOfMonsters--;
   }
-  
+  while (true) {
+    cout<<"\nSelect a Battle Type!\n1 - PVE Battle\n2 - PVP Battle"<<endl;
+    cin>>BattleType;
+    if (BattleType == 1) {
+      cout<<"PVE Battle has been selected!"<<endl;
+      break;
+    }
+    else if (BattleType == 2) {
+      cout<<"PVP Battle has been selected!"<<endl;
+      break;
+    }
+    else {
+      cout<<"Invalid Battle Type! Try Again!"<<endl;
+    }
+  }
 }
 
 void BattleIndex() {
