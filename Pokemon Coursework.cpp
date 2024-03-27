@@ -17,7 +17,27 @@ class Monster {
       Type = T;
       Health = H;
     }
+    string GetName() {
+      return Name; 
+    }
+    string GetType() {
+      return Type;
+    }
+    int GetHealth() {
+      return Health;
+    }
 };  
+class FireMonster : public Monster {
+  public:
+    void Flamethrower(class Monster Enemy) {
+      if (Enemy.GetType() == "Water") {
+        cout<<"Not Very Effective"<<endl;
+        
+      }
+    }
+
+};
+
 int GenerateNumber(short min, short max) {
   srand(time(0));
   short RanNum = (rand()%(max - min + 1)) + min;
@@ -39,6 +59,11 @@ void Battle() {
     else if (NumberOfMonsters == 1) {
       cout<<NumberOfMonsters<<" Monster for battle selected!\n";
       break;
+    }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Wrong data type entered! Try Again!\n";
     }
     else {
       cout<<"Invalid Number of Monsters! Try Again!\n";
@@ -107,8 +132,15 @@ int main() {
       cout<<"Exit has been selected program will now cease running!"<<endl;
       break;
     }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
+    }
+      
     else {
-      cout<<"That is an invalid choice! Try again!\n\n\n";
+      cout<<"That is an invalid Number! Try again!\n\n\n";
+    
     }
   }
   return 0;
