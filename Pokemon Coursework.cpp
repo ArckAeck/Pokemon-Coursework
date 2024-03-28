@@ -82,7 +82,14 @@ void Battle() {
     }
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
-    NumberOfMonsters--;
+    if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
+      cout<<"You have selected Monster! "<<SelectedMonster<<endl;
+      NumberOfMonsters--;
+      MonsterList.erase(SelectedMonster);
+    }
+    else {
+      cout<<"That is not a valid Monster! Try Again!"<<endl;
+    }
   }
   while (true) {
     cout<<"\nSelect a Battle Type!\n1 - PVE Battle\n2 - PVP Battle"<<endl;
