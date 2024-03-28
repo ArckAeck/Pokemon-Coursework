@@ -55,7 +55,6 @@ void Battle() {
   Monster Charmanker("Charmanker","Fire",95);
   MonsterList.insert(pair<string, Monster>("Pikacho",Pikacho));
   MonsterList.insert(pair<string, Monster>("Charmanker",Charmanker));
-  
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -76,7 +75,11 @@ void Battle() {
       cout<<"Invalid Number of Monsters! Try Again!\n";
     } 
   }
+  cout<<"Here is the list of available monsters to fight with:\n";
   while (NumberOfMonsters > 0) {
+    for (const auto &[key,value] : MonsterList ) {
+      cout<<key<<endl;
+    }
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     NumberOfMonsters--;
