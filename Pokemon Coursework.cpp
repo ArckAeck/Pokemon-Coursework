@@ -4,6 +4,7 @@
 #include <cmath>
 #include <ctime>
 #include <string>
+#include <vector>
 using namespace std;
 
 class Monster {
@@ -51,10 +52,15 @@ void Battle() {
   string SelectedMonster;
   string MonsterTeam[] = {};
   map<string, Monster> MonsterList;
+  vector<Monster> MonsterTeam;
   Monster Pikacho("Pikacho","Electric",100);
   Monster Charmanker("Charmanker","Fire",95);
+  Monster Dragonknight("Dragonknight","Dragon",130);
+  Monster Mewthree("Mewthree","Pyschic",120);
   MonsterList.insert(pair<string, Monster>("Pikacho",Pikacho));
   MonsterList.insert(pair<string, Monster>("Charmanker",Charmanker));
+  MonsterList.insert(pair<string, Monster>("Dragonknight",Dragonknight));
+  MonsterList.insert(pair<string, Monster>("Mewthree",Mewthree));
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
