@@ -2,8 +2,8 @@
 #include <map>
 #include <fstream>
 #include <cmath>
-#include <vector>
 #include <ctime>
+#include <string>
 using namespace std;
 
 class Monster {
@@ -29,9 +29,11 @@ class Monster {
 };  
 class FireMonster : public Monster {
   public:
-    void Flamethrower(class Monster Enemy) {
+    void SelectMove(class Monster Enemy) {
+      cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame Charge\n3 - Blaze Kick"<<endl;
       if (Enemy.GetType() == "Water") {
         cout<<"Not Very Effective"<<endl;
+        
         
       }
     }
@@ -48,7 +50,12 @@ void Battle() {
   int BattleType;
   string SelectedMonster;
   string MonsterTeam[] = {};
-  Monster Pikachu("Pikachu","Electric",100);
+  map<string, Monster> MonsterList;
+  Monster Pikacho("Pikacho","Electric",100);
+  Monster Charmanker("Charmanker","Fire",95);
+  MonsterList.insert(pair<string, Monster>("Pikacho",Pikacho));
+  MonsterList.insert(pair<string, Monster>("Charmanker",Charmanker));
+  
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
