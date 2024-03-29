@@ -42,7 +42,6 @@ class FireMonster : public Monster {
     }
 
 };
-
 int GenerateNumber(short min, short max) {
   srand(time(0));
   short RanNum = (rand()%(max - min + 1)) + min;
@@ -51,16 +50,8 @@ int GenerateNumber(short min, short max) {
 void RandomSelect(map<string,Monster> MonsterMap) {
   cout<<"Feature currently out of comission";
 }
-
-
-
-
 void Battle() {
-  int Position = 1;
-  int IndexNumber = 1;
-  int NumberOfMonsters;
-  int BattleType;
-  int SelectedMonster;
+  int NumberOfMonsters,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList;
   map<int, Monster> Player1Monsters;
@@ -68,10 +59,14 @@ void Battle() {
   Monster Charmanker("Charmanker","Fire",95);
   Monster Dragonknight("Dragonknight","Dragon",130);
   Monster Mewthree("Mewthree","Pyschic",120);
+  Monster Garthwomp("Garthwomp","Dragon",110);
+  Monster Raygaza("Raygaza","Dragon",150);
   MonsterList.insert(pair<int, Monster>(1,Pikacho));
   MonsterList.insert(pair<int, Monster>(2,Charmanker));
   MonsterList.insert(pair<int, Monster>(3,Dragonknight));
   MonsterList.insert(pair<int, Monster>(4,Mewthree));
+  MonsterList.insert(pair<int, Monster>(5,Garthwomp));
+  MonsterList.insert(pair<int, Monster>(6,Raygaza));
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -95,16 +90,13 @@ void Battle() {
   cout<<"Here is the list of available monsters to choose:\n";
   while (NumberOfMonsters > 0) {
     for (auto& pair : MonsterList) {
-      cout<<IndexNumber<<" - "<<pair.second.GetName()<<endl;
-      IndexNumber++;
+      cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
         }
-    
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
-      cout<<"You have selected Monster! "<<SelectedMonster<<"\n"<<endl;
       NumberOfMonsters--;
-      Player1Monsters.insert(pair<int, Monster>(Position,Pikacho));
+      Player1Monsters.insert(pair<int, Monster>(Position,Charmanker));
       MonsterList.erase(SelectedMonster);
       Position++;
     }
@@ -116,9 +108,9 @@ void Battle() {
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
     }
-      for (auto& pair : Player1Monsters) {
-        cout<<"Player1 Monster: "<<pair.second.GetName()<<endl;
-          }
+    for (auto& pair : Player1Monsters) {
+      cout<<"Player1 Monster: "<<pair.second.GetName()<<"\n"<<endl;
+        }
   }
   cout<<"All Choices have been made for Player 1's team!";
   while (true) {
@@ -126,16 +118,22 @@ void Battle() {
     cin>>BattleType;
     if (BattleType == 1) {
       cout<<"PVE Battle has been selected!"<<endl;
-      for (int n = 0; n < Player1Monsters.size(); n++) {
-        cout<<"here for a sec"<<endl;        
+      int EnemySize = 0;
+      while (EnemySize < Player1Monsters.size()) {
+        int NewNumber = GenerateNumber(1,4);
+        if (MonsterList.find(NewNumber) != MonsterList.end()) {
+          cout<<NewNumber<<" AI has selected a monster!"<<endl;
+          MonsterList.erase(NewNumber);
+          EnemySize++;
+        } 
+        else {
+          continue;
+        }
       }
       break;
     }
     else if (BattleType == 2) {
       cout<<"PVP Battle has been selected!"<<endl;
-      //for (const auto &[key,value] : MonsterList ) {
-       // cout<<key<<endl;
-     // }
       break;
     }
     else if (cin.fail()) {
