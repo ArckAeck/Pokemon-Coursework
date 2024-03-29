@@ -57,20 +57,21 @@ void RandomSelect(map<string,Monster> MonsterMap) {
 
 void Battle() {
   int Position = 1;
+  int IndexNumber = 1;
   int NumberOfMonsters;
   int BattleType;
-  string SelectedMonster;
+  int SelectedMonster;
   string MonsterTeam[] = {};
-  map<string, Monster> MonsterList;
+  map<int, Monster> MonsterList;
   map<int, Monster> Player1Monsters;
   Monster Pikacho("Pikacho","Electric",100);
   Monster Charmanker("Charmanker","Fire",95);
   Monster Dragonknight("Dragonknight","Dragon",130);
   Monster Mewthree("Mewthree","Pyschic",120);
-  MonsterList.insert(pair<string, Monster>("Pikacho",Pikacho));
-  MonsterList.insert(pair<string, Monster>("Charmanker",Charmanker));
-  MonsterList.insert(pair<string, Monster>("Dragonknight",Dragonknight));
-  MonsterList.insert(pair<string, Monster>("Mewthree",Mewthree));
+  MonsterList.insert(pair<int, Monster>(1,Pikacho));
+  MonsterList.insert(pair<int, Monster>(2,Charmanker));
+  MonsterList.insert(pair<int, Monster>(3,Dragonknight));
+  MonsterList.insert(pair<int, Monster>(4,Mewthree));
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -94,7 +95,8 @@ void Battle() {
   cout<<"Here is the list of available monsters to choose:\n";
   while (NumberOfMonsters > 0) {
     for (auto& pair : MonsterList) {
-      cout<< pair.second.GetName()<<endl;
+      cout<<IndexNumber<<" - "<<pair.second.GetName()<<endl;
+      IndexNumber++;
         }
     
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
@@ -106,11 +108,16 @@ void Battle() {
       MonsterList.erase(SelectedMonster);
       Position++;
     }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Invalid! Please select the number for which monster you would like to select\n"<<endl;
+    }
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
     }
-      for (auto& pair : MonsterList) {
-        cout<< pair.second.GetName()<<endl;
+      for (auto& pair : Player1Monsters) {
+        cout<<"Player1 Monster: "<<pair.second.GetName()<<endl;
           }
   }
   cout<<"All Choices have been made for Player 1's team!";
@@ -141,15 +148,6 @@ void Battle() {
     }
   }
 }
-
-
-
-
-
-
-
-
-
 
 
 void BattleIndex() {
