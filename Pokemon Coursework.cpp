@@ -52,7 +52,7 @@ void Battle() {
   string SelectedMonster;
   string MonsterTeam[] = {};
   map<string, Monster> MonsterList;
-  vector<Monster> MonsterTeam;
+  map<string, Monster> Player1Monsters;
   Monster Pikacho("Pikacho","Electric",100);
   Monster Charmanker("Charmanker","Fire",95);
   Monster Dragonknight("Dragonknight","Dragon",130);
@@ -91,11 +91,16 @@ void Battle() {
     if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
       cout<<"You have selected Monster! "<<SelectedMonster<<endl;
       NumberOfMonsters--;
+      Player1Monsters.insert(pair<string, Monster>(SelectedMonster,Pikacho));
       MonsterList.erase(SelectedMonster);
     }
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
     }
+    for (const auto &[key,value] : MonsterList ) {
+      cout<<"Here is Player1's current monster selection!"<<key<<endl;
+    }
+    cout<<"All Choices have been made for Player 1's team!";
   }
   while (true) {
     cout<<"\nSelect a Battle Type!\n1 - PVE Battle\n2 - PVP Battle"<<endl;
