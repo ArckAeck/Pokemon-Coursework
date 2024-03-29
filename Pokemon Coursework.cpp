@@ -93,9 +93,10 @@ void Battle() {
   }
   cout<<"Here is the list of available monsters to choose:\n";
   while (NumberOfMonsters > 0) {
-    for (const auto &[key,value] : MonsterList ) {
-      cout<<key<<endl;
-    }
+    for (auto& pair : MonsterList) {
+      cout<< pair.second.GetName()<<endl;
+        }
+    
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
@@ -108,9 +109,9 @@ void Battle() {
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
     }
-    for (const auto &[key,value] : Player1Monsters ) {
-      cout<<"Player1 Monster: "<<key<<"\n"<<endl;
-    }
+      for (auto& pair : MonsterList) {
+        cout<< pair.second.GetName()<<endl;
+          }
   }
   cout<<"All Choices have been made for Player 1's team!";
   while (true) {
@@ -125,9 +126,9 @@ void Battle() {
     }
     else if (BattleType == 2) {
       cout<<"PVP Battle has been selected!"<<endl;
-      for (const auto &[key,value] : MonsterList ) {
-        cout<<key<<endl;
-      }
+      //for (const auto &[key,value] : MonsterList ) {
+       // cout<<key<<endl;
+     // }
       break;
     }
     else if (cin.fail()) {
