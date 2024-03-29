@@ -5,6 +5,7 @@
 #include <ctime>
 #include <string>
 #include <vector>
+#include <iterator>
 using namespace std;
 
 class Monster {
@@ -28,6 +29,7 @@ class Monster {
       return Health;
     }
 };  
+
 class FireMonster : public Monster {
   public:
     void SelectMove(class Monster Enemy) {
@@ -46,13 +48,21 @@ int GenerateNumber(short min, short max) {
   short RanNum = (rand()%(max - min + 1)) + min;
   return RanNum;
 }
+void RandomSelect(map<string,Monster> MonsterMap) {
+  cout<<"Feature currently out of comission";
+}
+
+
+
+
 void Battle() {
+  int Position = 1;
   int NumberOfMonsters;
   int BattleType;
   string SelectedMonster;
   string MonsterTeam[] = {};
   map<string, Monster> MonsterList;
-  map<string, Monster> Player1Monsters;
+  map<int, Monster> Player1Monsters;
   Monster Pikacho("Pikacho","Electric",100);
   Monster Charmanker("Charmanker","Fire",95);
   Monster Dragonknight("Dragonknight","Dragon",130);
@@ -81,7 +91,7 @@ void Battle() {
       cout<<"Invalid Number of Monsters! Try Again!\n";
     } 
   }
-  cout<<"Here is the list of available monsters to fight with:\n";
+  cout<<"Here is the list of available monsters to choose:\n";
   while (NumberOfMonsters > 0) {
     for (const auto &[key,value] : MonsterList ) {
       cout<<key<<endl;
@@ -89,35 +99,57 @@ void Battle() {
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
-      cout<<"You have selected Monster! "<<SelectedMonster<<endl;
+      cout<<"You have selected Monster! "<<SelectedMonster<<"\n"<<endl;
       NumberOfMonsters--;
-      Player1Monsters.insert(pair<string, Monster>(SelectedMonster,Pikacho));
+      Player1Monsters.insert(pair<int, Monster>(Position,Pikacho));
       MonsterList.erase(SelectedMonster);
+      Position++;
     }
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
     }
-    for (const auto &[key,value] : MonsterList ) {
-      cout<<"Here is Player1's current monster selection!"<<key<<endl;
+    for (const auto &[key,value] : Player1Monsters ) {
+      cout<<"Player1 Monster: "<<key<<"\n"<<endl;
     }
-    cout<<"All Choices have been made for Player 1's team!";
   }
+  cout<<"All Choices have been made for Player 1's team!";
   while (true) {
     cout<<"\nSelect a Battle Type!\n1 - PVE Battle\n2 - PVP Battle"<<endl;
     cin>>BattleType;
     if (BattleType == 1) {
       cout<<"PVE Battle has been selected!"<<endl;
+      for (int n = 0; n < Player1Monsters.size(); n++) {
+        cout<<"here for a sec"<<endl;        
+      }
       break;
     }
     else if (BattleType == 2) {
       cout<<"PVP Battle has been selected!"<<endl;
+      for (const auto &[key,value] : MonsterList ) {
+        cout<<key<<endl;
+      }
       break;
+    }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Wrong data type! Try again!"<<endl;
     }
     else {
       cout<<"Invalid Battle Type! Try Again!"<<endl;
     }
   }
 }
+
+
+
+
+
+
+
+
+
+
 
 void BattleIndex() {
   cout<<"\nFeature not currently operational"<<endl;
