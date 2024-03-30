@@ -120,7 +120,7 @@ void Battle() {
       cout<<"PVE Battle has been selected!"<<endl;
       int EnemySize = 0;
       while (EnemySize < Player1Monsters.size()) {
-        int NewNumber = GenerateNumber(1,4);
+        int NewNumber = GenerateNumber(1,6);
         if (MonsterList.find(NewNumber) != MonsterList.end()) {
           cout<<NewNumber<<" AI has selected a monster!"<<endl;
           MonsterList.erase(NewNumber);
