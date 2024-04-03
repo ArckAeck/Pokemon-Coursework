@@ -51,10 +51,9 @@ void RandomSelect(map<string,Monster> MonsterMap) {
   cout<<"Feature currently out of comission";
 }
 void Battle() {
-  int NumberOfMonsters,BattleType,SelectedMonster,Position = 1;
+  int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
-  map<int, Monster> MonsterList;
-  map<int, Monster> Player1Monsters;
+  map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
   Monster Pikacho("Pikacho","Electric",100);
   Monster Charmanker("Charmanker","Fire",95);
   Monster Dragonknight("Dragonknight","Dragon",130);
@@ -87,6 +86,7 @@ void Battle() {
       cout<<"Invalid Number of Monsters! Try Again!\n";
     } 
   }
+  NumberOfMonsters2 = NumberOfMonsters;
   cout<<"Here is the list of available monsters to choose:\n";
   while (NumberOfMonsters > 0) {
     for (auto& pair : MonsterList) {
@@ -119,22 +119,48 @@ void Battle() {
     if (BattleType == 1) {
       cout<<"PVE Battle has been selected!"<<endl;
       int EnemySize = 0;
+      map<int, Monster> BotMonsters;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,6);
         if (MonsterList.find(NewNumber) != MonsterList.end()) {
-          cout<<NewNumber<<" AI has selected a monster!"<<endl;
+          BotMonsters.insert(pair<int, Monster>(NewNumber,Charmanker));
+          cout<<"CPU picked Monster: "<<NewNumber<<"\n"<<endl;
           MonsterList.erase(NewNumber);
           EnemySize++;
         } 
         else {
           continue;
-        }
+        } 
       }
       break;
     }
     else if (BattleType == 2) {
       cout<<"PVP Battle has been selected!"<<endl;
+        while (NumberOfMonsters2 > 0) {
+          for (auto& pair : MonsterList) {
+            cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
+              }
+          cout<<"Player 2! Select a Monster to fight with! "<<NumberOfMonsters2<<" choices remaining!"<<endl;
+          cin>>SelectedMonster;
+          if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
+            NumberOfMonsters--;
+            Player2Monsters.insert(pair<int, Monster>(Position,Charmanker));
+            MonsterList.erase(SelectedMonster);
+            Position++;
+          }
+          else if (cin.fail()) {
+            cin.clear();
+            cin.ignore();
+            cout<<"Invalid! Please select the number for which monster you would like to select\n"<<endl;
+          }
+          else {
+            cout<<"That is not a valid Monster! Try Again!"<<endl;
+          }
+          for (auto& pair : Player2Monsters) {
+            cout<<"Player2 Monster: "<<pair.second.GetName()<<"\n"<<endl;
+              }
       break;
+      }
     }
     else if (cin.fail()) {
       cin.clear();
@@ -153,18 +179,17 @@ void BattleIndex() {
 }
 
 void TypingInformation() {
-  string Value;
+  string line;
   ifstream TypingFile("TypingMatchups.txt");
-  if (!TypingFile) {
-    cout<<"Error! File does not exist!"<<endl;
-  } 
-  else {
-    while (!TypingFile.eof()) {
-    TypingFile>>Value;
-    cout<<Value<<endl;
+  if (TypingFile.is_open()) {
+    while (getline(TypingFile, line)) { 
+      cout <<line<< endl; 
     }
+    TypingFile.close();
   }
-  TypingFile.close();
+  else {
+    cerr<<"File was unable to be opened!"; 
+  }
 }
 
 int main() {
