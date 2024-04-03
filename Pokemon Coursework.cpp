@@ -36,8 +36,7 @@ class FireMonster : public Monster {
       cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame Charge\n3 - Blaze Kick"<<endl;
       if (Enemy.GetType() == "Water") {
         cout<<"Not Very Effective"<<endl;
-        
-        
+          
       }
     }
 
@@ -175,7 +174,57 @@ void Battle() {
 
 
 void BattleIndex() {
-  cout<<"\nFeature not currently operational"<<endl;
+  int Choice;
+  cout<<"\nWhat would you like to do?\n1 - Display entire battle index\n2 - Search for a Monster in battle index"<<endl;
+  cin>>Choice;
+  while (true) {
+    ifstream TypingFile("BattleIndex.txt");
+    if (Choice == 1) {
+      string line;
+        ifstream BattleIndexFile("BattleIndex.txt");
+        if (BattleIndexFile.is_open()) {
+          while (getline(BattleIndexFile, line)) { 
+            cout <<line<< endl; 
+          }
+          BattleIndexFile.close();
+        }
+        else {
+          cerr<<"File was unable to be opened!"; 
+        }
+        break;
+      }
+    else if (Choice == 2) {
+      string Search,Line;
+      int offset;
+      ifstream TypingFile("BattleIndex.txt");
+      TypingFile.open("BattleIndex.txt");
+      cout<<"Enter the name of the monster you would like to search for!";
+      cin>>Search;
+      if(TypingFile.is_open()) {
+        while (!TypingFile.eof()) {
+          getline(TypingFile,Line);
+          if ((offset = Line.find(Search, 0)) != string::npos)
+          {
+              cout << "The word has been found " << Search << endl;
+          }
+          TypingFile.close(); 
+        }
+      } 
+      else {
+        cerr<<"File not found!";
+      }
+    }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
+      continue;
+    }
+    else {
+      cout<<"Invalid Number! Try Again!\n\n\n"<<endl;
+      continue;
+    }
+  }
 }
 
 void TypingInformation() {
@@ -204,7 +253,7 @@ int main() {
     else if (Userchoice == 2) {
       cout<<"Battle Index has been selected!"<<endl;
       BattleIndex();
-      cout<<GenerateNumber(50,100);
+      
     }
     else if (Userchoice == 3) {
       cout<<"Typing information has been selected!"<<endl;
