@@ -27,7 +27,15 @@ class Monster {
     }
     int GetHealth() {
       return Health;
+    } 
+    void SetHealth(int NewHealth) {
+      Health = NewHealth;
     }
+    void Battle(Monster Enemy) {
+      cout<<Enemy.GetHealth();      
+    }
+
+
 };  
 
 class FireMonster : public Monster {
@@ -93,9 +101,10 @@ void Battle() {
         }
     cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
-    if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
+    auto it=MonsterList.find(SelectedMonster);
+    if (it != MonsterList.end()) {
       NumberOfMonsters--;
-      Player1Monsters.insert(pair<int, Monster>(Position,Charmanker));
+      Player1Monsters.insert(pair<int, Monster>(Position,it->second));
       MonsterList.erase(SelectedMonster);
       Position++;
     }
@@ -121,8 +130,9 @@ void Battle() {
       map<int, Monster> BotMonsters;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,6);
-        if (MonsterList.find(NewNumber) != MonsterList.end()) {
-          BotMonsters.insert(pair<int, Monster>(NewNumber,Charmanker));
+        auto it=MonsterList.find(SelectedMonster);
+        if (it != MonsterList.end()) {
+          BotMonsters.insert(pair<int, Monster>(NewNumber,it->second));
           cout<<"CPU picked Monster: "<<NewNumber<<"\n"<<endl;
           MonsterList.erase(NewNumber);
           EnemySize++;
@@ -131,6 +141,7 @@ void Battle() {
           continue;
         } 
       }
+      Charmanker.Battle(Dragonknight);
       break;
     }
     else if (BattleType == 2) {
@@ -141,9 +152,10 @@ void Battle() {
               }
           cout<<"Player 2! Select a Monster to fight with! "<<NumberOfMonsters2<<" choices remaining!"<<endl;
           cin>>SelectedMonster;
-          if (MonsterList.find(SelectedMonster) != MonsterList.end()) {
+          auto it=MonsterList.find(SelectedMonster);
+          if (it!= MonsterList.end()) {
             NumberOfMonsters--;
-            Player2Monsters.insert(pair<int, Monster>(Position,Charmanker));
+            Player2Monsters.insert(pair<int, Monster>(Position,it->second));
             MonsterList.erase(SelectedMonster);
             Position++;
           }
@@ -169,7 +181,7 @@ void Battle() {
     else {
       cout<<"Invalid Battle Type! Try Again!"<<endl;
     }
-  }
+  }  
 }
 
 
