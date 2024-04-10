@@ -74,13 +74,26 @@ class FireMonster : public Monster {
           HPChange = GenerateNumber(20,100);
           ChanceOfHappening = GenerateNumber(1,3);
           if (ChanceOfHappening == 3) {
-            cout<<"Flame of life was activated!";
+            cout<<"Flame of life was activated!"<<endl;
             SetHealth(GetHealth() + HPChange);
-            cout<<GetName()<<"'s Health is now "<<GetHealth();
+            cout<<GetName()<<"'s Health is now "<<GetHealth()<<endl;
           } 
           else {
             cout<<"Flame of life failed! "<<GetHealth()<< "'s Health remains the same";
-          }    
+          }
+        }
+        else if (AttackChoice == 3) {
+          cout<<GetName()<<" Used Blaze Kick"<<endl;
+          HPChange = GenerateNumber(75,100);
+          ChanceOfHappening = GenerateNumber(1,2);
+          if (ChanceOfHappening == 2) {
+            cout<<"Blaze Kick was activated!"<<endl;
+            Enemy.SetHealth(Enemy.GetHealth() + HPChange);
+            cout<<Enemy.GetName()<<"'s Health is now "<<Enemy.GetHealth()<<endl;
+          }
+          else {
+            cout<<"Blaze Kick failed! "<<Enemy.GetName()<<"'s Health remains the same";
+          }
         }
         else if (cin.fail()) {
           cin.clear();
@@ -92,8 +105,13 @@ class FireMonster : public Monster {
         }
     }
   }
-
 };
+
+
+
+
+
+
 void Battle() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
@@ -126,7 +144,7 @@ void Battle() {
     for (auto& pair : MonsterList) {
       cout<<pair.first<<" - "<<pair.second.GetName()<<" Type: "<<pair.second.GetType()<<endl;
         }
-    cout<<"Select a Monster to fight with! "<<NumberOfMonsters<<" choices remaining!"<<endl;
+    cout<<"Enter the number of the monster you'd like to choose! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     auto it=MonsterList.find(SelectedMonster);
     if (it != MonsterList.end()) {
@@ -180,10 +198,11 @@ void Battle() {
           cin>>SelectedMonster;
           auto it=MonsterList.find(SelectedMonster);
           if (it!= MonsterList.end()) {
-            NumberOfMonsters--;
+            NumberOfMonsters2--;
             Player2Monsters.insert(pair<int, Monster>(Position,it->second));
             MonsterList.erase(SelectedMonster);
             Position++;
+            
           }
           else if (cin.fail()) {
             cin.clear();
@@ -196,8 +215,8 @@ void Battle() {
           for (auto& pair : Player2Monsters) {
             cout<<"Player2 Monster: "<<pair.second.GetName()<<"\n"<<endl;
               }
-      break;
       }
+      break;
     }
     else if (cin.fail()) {
       cin.clear();
