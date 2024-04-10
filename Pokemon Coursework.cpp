@@ -12,7 +12,6 @@ int GenerateNumber(short min, short max) {
   short RanNum = (rand()%(max - min + 1)) + min;
   return RanNum;
 }
-
 class Monster {
   private:
     string Name;
@@ -37,35 +36,55 @@ class Monster {
       Health = NewHealth;
     }
     void Attack(Monster Enemy) {     
-    }   
+    }
+    
 };  
 class FireMonster : public Monster {
   public:
     int CheckDamage(int PrevDamage, Monster Enemy) {
       if (Enemy.GetType() == "Water") {
         PrevDamage /= GenerateNumber(2,3);
+        cout<<"It was not very effective!";
       }
       else if (Enemy.GetType() == "Dragon") {
         PrevDamage *= GenerateNumber(2,3);
+        cout<<"It was very effective!";
       }
       return PrevDamage;
     }
     void Attack(Monster Enemy) {
-      int AttackChoice;
-      int Damage;
+      int AttackChoice, HPChange, TypeDamage, ChanceOfHappening;
       while (true) {
-        cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame Charge\n3 - Blaze Kick"<<endl;
+        cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame of Life\n3 - Blaze Kick"<<endl;
         cin>>AttackChoice;
         if (AttackChoice == 1) {
-          cout<<GetName()<<"Used Flamethrower"<<endl;
-          Damage = GenerateNumber(50,75);
-          CheckDamage(Damage, Enemy);
+          cout<<GetName()<<" Used Flamethrower"<<endl;
+          HPChange = GenerateNumber(50,75);
+          TypeDamage = CheckDamage(HPChange, Enemy);
+          cout<<"Flamethrower did "<<TypeDamage<<"\n"<<Enemy.GetName()<<"'s Health is now"<<Enemy.GetHealth();
+          Enemy.SetHealth(Enemy.GetHealth() - TypeDamage);
+        }
+        else if (AttackChoice == 2) {
+          cout<<GetName()<<" Used Flame of life"<<endl;
+          HPChange = GenerateNumber(20,100);
+          ChanceOfHappening = GenerateNumber(1,3);
+          if (ChanceOfHappening == 3) {
+            cout<<"Flame of life was activated!";
+            SetHealth(GetHealth() + HPChange);
+            cout<<GetName()<<"'s Health is now "<<GetHealth();
+          } 
+          else {
+            cout<<"Flame of life failed! "<<GetHealth()<< "'s Health remains the same";
+          }    
         }
         else if (cin.fail()) {
           cin.clear();
           cin.ignore();
           cout<<"That is the wrong data type! Try again!\n";
-      }
+        }
+        else {
+          cout<<"Invalid move number entered! Try again!\n";
+        }
     }
   }
 
@@ -259,7 +278,7 @@ void TypingInformation() {
 int main() {
   int Userchoice;  
   while (true) {
-    cout<<"\nWelcome to the monster battle simulator! what would you like to do?\n1 - Start a battle\n2 - Battle Index\n3 - Typing Information\n4 - Quit\n5- Testing\n";
+    cout<<"\nWelcome to the monster battle simulator! what would you like to do?\n1 - Start a battle\n2 - Battle Index\n3 - Typing Information\n4 - Quit\n";
     cin>>Userchoice;
     if (Userchoice == 1) {
       cout<<"Start a battle has been selected!"<<endl;
@@ -283,10 +302,7 @@ int main() {
       cin.ignore();
       cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
     }
-    else if (Userchoice == 5) {
-      cout<<"Testing Arena!"<<endl;
-      
-    } 
+     
     else {
       cout<<"That is an invalid Number! Try again!\n\n\n";
     
