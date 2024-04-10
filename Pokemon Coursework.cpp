@@ -7,6 +7,12 @@
 #include <iterator>
 using namespace std;
 
+int GenerateNumber(short min, short max) {
+  srand(time(0));
+  short RanNum = (rand()%(max - min + 1)) + min;
+  return RanNum;
+}
+
 class Monster {
   private:
     string Name;
@@ -30,31 +36,41 @@ class Monster {
     void SetHealth(int NewHealth) {
       Health = NewHealth;
     }
-    void Battle(Monster Enemy) {
-      cout<<Enemy.GetHealth();      
-    }
-
-
+    void Attack(Monster Enemy) {     
+    }   
 };  
 class FireMonster : public Monster {
   public:
-    void SelectMove(class Monster Enemy) {
-      cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame Charge\n3 - Blaze Kick"<<endl;
+    int CheckDamage(int PrevDamage, Monster Enemy) {
       if (Enemy.GetType() == "Water") {
-        cout<<"Not Very Effective"<<endl;
-          
+        PrevDamage /= GenerateNumber(2,3);
+      }
+      else if (Enemy.GetType() == "Dragon") {
+        PrevDamage *= GenerateNumber(2,3);
+      }
+      return PrevDamage;
+    }
+    void Attack(Monster Enemy) {
+      int AttackChoice;
+      int Damage;
+      while (true) {
+        cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame Charge\n3 - Blaze Kick"<<endl;
+        cin>>AttackChoice;
+        if (AttackChoice == 1) {
+          cout<<GetName()<<"Used Flamethrower"<<endl;
+          Damage = GenerateNumber(50,75);
+          CheckDamage(Damage, Enemy);
+        }
+        else if (cin.fail()) {
+          cin.clear();
+          cin.ignore();
+          cout<<"That is the wrong data type! Try again!\n";
       }
     }
+  }
 
 };
-int GenerateNumber(short min, short max) {
-  srand(time(0));
-  short RanNum = (rand()%(max - min + 1)) + min;
-  return RanNum;
-}
-void RandomSelect(map<string,Monster> MonsterMap) {
-  cout<<"Feature currently out of comission";
-}
+
 void Battle() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
@@ -129,7 +145,6 @@ void Battle() {
           continue;
         } 
       }
-      Charmanker.Battle(Dragonknight);
       break;
     }
     else if (BattleType == 2) {
@@ -244,7 +259,7 @@ void TypingInformation() {
 int main() {
   int Userchoice;  
   while (true) {
-    cout<<"\nWelcome to the monster battle simulator! what would you like to do?\n1 - Start a battle\n2 - Battle Index\n3 - Typing Information\n4 - Quit\n";
+    cout<<"\nWelcome to the monster battle simulator! what would you like to do?\n1 - Start a battle\n2 - Battle Index\n3 - Typing Information\n4 - Quit\n5- Testing\n";
     cin>>Userchoice;
     if (Userchoice == 1) {
       cout<<"Start a battle has been selected!"<<endl;
@@ -268,7 +283,10 @@ int main() {
       cin.ignore();
       cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
     }
+    else if (Userchoice == 5) {
+      cout<<"Testing Arena!"<<endl;
       
+    } 
     else {
       cout<<"That is an invalid Number! Try again!\n\n\n";
     
