@@ -4,7 +4,6 @@
 #include <cmath>
 #include <ctime>
 #include <string>
-#include <vector>
 #include <iterator>
 using namespace std;
 
@@ -37,7 +36,6 @@ class Monster {
 
 
 };  
-
 class FireMonster : public Monster {
   public:
     void SelectMove(class Monster Enemy) {
@@ -61,18 +59,8 @@ void Battle() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
-  Monster Pikacho("Pikacho","Electric",100);
-  Monster Charmanker("Charmanker","Fire",95);
-  Monster Dragonknight("Dragonknight","Dragon",130);
-  Monster Mewthree("Mewthree","Pyschic",120);
-  Monster Garthwomp("Garthwomp","Dragon",110);
-  Monster Raygaza("Raygaza","Dragon",150);
-  MonsterList.insert(pair<int, Monster>(1,Pikacho));
-  MonsterList.insert(pair<int, Monster>(2,Charmanker));
-  MonsterList.insert(pair<int, Monster>(3,Dragonknight));
-  MonsterList.insert(pair<int, Monster>(4,Mewthree));
-  MonsterList.insert(pair<int, Monster>(5,Garthwomp));
-  MonsterList.insert(pair<int, Monster>(6,Raygaza));
+  Monster Pikacho("Pikacho","Electric",100), Charmanker("Charmanker","Fire",95), Dragonknight("Dragonknight","Dragon",130), Mewthree("Mewthree","Pyschic",120), Garthwomp("Garthwomp","Dragon",110), Raygaza("Raygaza","Dragon",150) ;
+  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Mewthree)), MonsterList.insert(pair<int, Monster>(5,Garthwomp)), MonsterList.insert(pair<int, Monster>(6,Raygaza));
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
