@@ -198,14 +198,19 @@ void MonsterSelection() {
         auto it=MonsterList.find(NewNumber);
         if (it != MonsterList.end()) {
           BotMonsters.insert(pair<int, Monster>(NewNumber,it->second));
-          cout<<"CPU picked Monster: "<<NewNumber<<"\n"<<endl;
           MonsterList.erase(NewNumber);
           EnemySize++;
+          cout<<"CPU Monster picked: "<<NewNumber<<endl;
+              
         } 
         else {
           continue;
         } 
       }
+      cout<<"The CPU Team has been selected here it is!\n"<<endl;
+      for (auto& pair : BotMonsters) {
+        cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
+          }
       Monster OpponentMonster = BotMonsters.begin()->second;
       break;
     }
@@ -281,18 +286,17 @@ void BattleIndex() {
       cout<<"Enter the name of the monster you would like to search for!";
       cin>>Search;
       unsigned int curLine = 0;
-      if (TypingFile.is_open()) {
-        while(getline(TypingFile, Line)) {
-            curLine++;
-            if (Line.find(Search) != string::npos) {
-                cout << "found: " << Search << "line: " << curLine << endl;
+      while(getline(TypingFile, Line)) {
+          curLine++;
+          if (Line.find(Search) != string::npos) {
+              cout << "found: " << Search << "line: " << curLine << endl;
             }
-            else {
-              cout<<"Monster not found!"<<endl;
+          else {
+            cout<<"Monster not found!"<<endl;
             }
-          TypingFile.close();
-          cout<<"Search Complete!";
-        }
+        TypingFile.close();
+        cout<<"Search Complete!";
+        break;
       }
     }
     else if (cin.fail()) {
