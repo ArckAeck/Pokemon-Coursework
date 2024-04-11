@@ -169,6 +169,7 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     int RandomNumber = GenerateNumber(1,Map.size());
     auto it=Map.find(RandomNumber);
     if (it != Map.end()) {
+      cout<<"CPU has switched monster!"<<endl;
       SelectedMonster = it->second;
       break;
     }
@@ -238,15 +239,16 @@ void MonsterSelection() {
     cin>>BattleType;
     if (BattleType == 1) {
       cout<<"PVE Battle has been selected!"<<endl;
-      int EnemySize = 0;
+      int EnemySize = 0, EnemyNumber = 1;
       map<int, Monster> BotMonsters;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,6);
         auto it=MonsterList.find(NewNumber);
         if (it != MonsterList.end()) {
-          BotMonsters.insert(pair<int, Monster>(NewNumber,it->second));
+          BotMonsters.insert(pair<int, Monster>(EnemyNumber,it->second));
           MonsterList.erase(NewNumber);
           EnemySize++;
+          EnemyNumber++;
           cout<<"CPU Monster picked: "<<NewNumber<<endl;
               
         } 
@@ -376,6 +378,7 @@ void TypingInformation() {
     cerr<<"File was unable to be opened!"; 
   }
 }
+
 int main() {
   int Userchoice;  
   while (true) {
