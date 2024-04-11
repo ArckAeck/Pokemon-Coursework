@@ -138,23 +138,45 @@ class WaterMonster : public Monster {
     }
   }
 };
-
-void SwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
+void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
   int Input;
-  cout<<"Please select the monster you would like to switch your current monster to!"<<endl;
-  for (auto& pair : Map) {
-    cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
-      }
-  cin>>Input;
-  auto it=Map.find(Input);
-  if (it != Map.end()) {
-    SelectedMonster = it->second;
+  while (true) {
+    cout<<"Please select the monster you would like to switch your current monster to!"<<endl;
+    for (auto& pair : Map) {
+      cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
+        }
+    cin>>Input;
+    auto it=Map.find(Input);
+    if (it != Map.end()) {
+      SelectedMonster = it->second;
+      break;
+    }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Wrong data type entered! Try Again!\n";
+      continue;
+    }
+    else {
+      cout<<"Invalid monster number entered! Try again!\n";
+      continue;
+    }
   }
-  else {
-    cout<<"Invalid monster number entered! Try again!\n";
   }
-}
 
+void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
+  while (true) {
+    int RandomNumber = GenerateNumber(1,Map.size());
+    auto it=Map.find(RandomNumber);
+    if (it != Map.end()) {
+      SelectedMonster = it->second;
+      break;
+    }
+    else {
+      continue;
+    }
+  }
+  }
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   //bool End = false;
@@ -237,8 +259,10 @@ void MonsterSelection() {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
       Monster OpponentMonster = BotMonsters.begin()->second;
-      SwitchMonster(Player1Monsters,CurrentMonster);
+      PlayerSwitchMonster(Player1Monsters,CurrentMonster);
       CurrentMonster.OutputStats();
+      BotSwitchMonster(BotMonsters,OpponentMonster);
+      OpponentMonster.OutputStats();
       break;
     }
     else if (BattleType == 2) {
@@ -352,7 +376,6 @@ void TypingInformation() {
     cerr<<"File was unable to be opened!"; 
   }
 }
-
 int main() {
   int Userchoice;  
   while (true) {
