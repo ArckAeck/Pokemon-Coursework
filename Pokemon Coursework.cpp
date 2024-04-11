@@ -42,6 +42,10 @@ class Monster {
     }
     void Attack(Monster Enemy) {     
     }
+    void OutputStats() {
+      cout<<"\nName: "<<GetName()<<"\nType: "<<GetType()<<"\nHealth: "<<GetHealth()<<"\nSpeed: "<<GetSpeed()<<endl;
+    }
+
     
 };  
 class FireMonster : public Monster {
@@ -107,8 +111,25 @@ class FireMonster : public Monster {
   }
 };
 
-
-
+class WaterMonster : public Monster {
+  public:
+    int CheckDamage(int PrevDamage, Monster Enemy) {
+      if (Enemy.GetType() == "Fire") {
+        PrevDamage *= GenerateNumber(2,3);
+        cout<<"It was very effective!";
+      }
+      else if (Enemy.GetType() == "Dragon") {
+        PrevDamage /= GenerateNumber(2,3);
+        cout<<"It was not very effective!";
+      }
+      return PrevDamage;
+    }
+  void Attack(Monster Enemy) {
+    while (true) {
+      cout<<"Here Are the Available Moves 1 - Water Gun\n2 - Waterfall\n3 - Water Jet"<<endl;
+    }
+  }
+};
 
 
 
@@ -116,8 +137,8 @@ void Battle() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
-  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Mewthree("Mewthree","Pyschic",120,25), Garthwomp("Garthwomp","Dragon",110,45), Raygaza("Raygaza","Dragon",150,60) ;
-  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Mewthree)), MonsterList.insert(pair<int, Monster>(5,Garthwomp)), MonsterList.insert(pair<int, Monster>(6,Raygaza));
+  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60) ;
+  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza));
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -166,6 +187,7 @@ void Battle() {
         }
   }
   cout<<"All Choices have been made for Player 1's team!";
+  Monster CurrentMonster = Player1Monsters.begin()->second;
   while (true) {
     cout<<"\nSelect a Battle Type!\n1 - PVE Battle\n2 - PVP Battle"<<endl;
     cin>>BattleType;
@@ -216,6 +238,8 @@ void Battle() {
             cout<<"Player2 Monster: "<<pair.second.GetName()<<"\n"<<endl;
               }
       }
+      
+      CurrentMonster.OutputStats();
       break;
     }
     else if (cin.fail()) {
@@ -232,9 +256,9 @@ void Battle() {
 
 void BattleIndex() {
   int Choice;
-  cout<<"\nWhat would you like to do?\n1 - Display entire battle index\n2 - Search for a Monster in battle index"<<endl;
-  cin>>Choice;
   while (true) {
+    cout<<"\nWhat would you like to do?\n1 - Display entire battle index\n2 - Search for a Monster in battle index"<<endl;
+    cin>>Choice;
     ifstream TypingFile("BattleIndex.txt");
     if (Choice == 1) {
       string line;
@@ -252,23 +276,21 @@ void BattleIndex() {
       }
     else if (Choice == 2) {
       string Search,Line;
-      int offset;
       ifstream TypingFile("BattleIndex.txt");
       TypingFile.open("BattleIndex.txt");
       cout<<"Enter the name of the monster you would like to search for!";
       cin>>Search;
-      if(TypingFile.is_open()) {
-        while (!TypingFile.eof()) {
-          getline(TypingFile,Line);
-          if ((offset = Line.find(Search, 0)) != string::npos)
-          {
-              cout << "The word has been found " << Search << endl;
+      unsigned int curLine = 0;
+      while(getline(TypingFile, Line)) {
+          curLine++;
+          if (Line.find(Search, 0) != string::npos) {
+              cout << "found: " << Search << "line: " << curLine << endl;
           }
-          TypingFile.close(); 
-        }
-      } 
-      else {
-        cerr<<"File not found!";
+          else {
+            cout<<"Monster not found!"<<endl;
+          }
+       // TypingFile.close();
+        cout<<"Search Complete!";
       }
     }
     else if (cin.fail()) {
