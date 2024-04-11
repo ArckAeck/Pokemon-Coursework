@@ -45,6 +45,14 @@ class Monster {
     void OutputStats() {
       cout<<"\nName: "<<GetName()<<"\nType: "<<GetType()<<"\nHealth: "<<GetHealth()<<"\nSpeed: "<<GetSpeed()<<endl;
     }
+    bool IsAlive() {
+      if (Health > 0) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
 
     
 };  
@@ -131,8 +139,25 @@ class WaterMonster : public Monster {
   }
 };
 
+void SwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
+  int Input;
+  cout<<"Please select the monster you would like to switch your current monster to!"<<endl;
+  for (auto& pair : Map) {
+    cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
+      }
+  cin>>Input;
+  auto it=Map.find(Input);
+  if (it != Map.end()) {
+    SelectedMonster = it->second;
+  }
+  else {
+    cout<<"Invalid monster number entered! Try again!\n";
+  }
+}
+
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
+  //bool End = false;
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
   Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60) ;
@@ -212,6 +237,8 @@ void MonsterSelection() {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
       Monster OpponentMonster = BotMonsters.begin()->second;
+      SwitchMonster(Player1Monsters,CurrentMonster);
+      CurrentMonster.OutputStats();
       break;
     }
     else if (BattleType == 2) {
