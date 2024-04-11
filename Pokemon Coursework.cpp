@@ -131,9 +131,7 @@ class WaterMonster : public Monster {
   }
 };
 
-
-
-void Battle() {
+void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
@@ -197,7 +195,7 @@ void Battle() {
       map<int, Monster> BotMonsters;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,6);
-        auto it=MonsterList.find(SelectedMonster);
+        auto it=MonsterList.find(NewNumber);
         if (it != MonsterList.end()) {
           BotMonsters.insert(pair<int, Monster>(NewNumber,it->second));
           cout<<"CPU picked Monster: "<<NewNumber<<"\n"<<endl;
@@ -208,6 +206,7 @@ void Battle() {
           continue;
         } 
       }
+      Monster OpponentMonster = BotMonsters.begin()->second;
       break;
     }
     else if (BattleType == 2) {
@@ -238,8 +237,9 @@ void Battle() {
             cout<<"Player2 Monster: "<<pair.second.GetName()<<"\n"<<endl;
               }
       }
-      
+      Monster OpponentMonster = Player2Monsters.begin()->second;
       CurrentMonster.OutputStats();
+      OpponentMonster.OutputStats();
       break;
     }
     else if (cin.fail()) {
@@ -281,16 +281,18 @@ void BattleIndex() {
       cout<<"Enter the name of the monster you would like to search for!";
       cin>>Search;
       unsigned int curLine = 0;
-      while(getline(TypingFile, Line)) {
-          curLine++;
-          if (Line.find(Search, 0) != string::npos) {
-              cout << "found: " << Search << "line: " << curLine << endl;
-          }
-          else {
-            cout<<"Monster not found!"<<endl;
-          }
-       // TypingFile.close();
-        cout<<"Search Complete!";
+      if (TypingFile.is_open()) {
+        while(getline(TypingFile, Line)) {
+            curLine++;
+            if (Line.find(Search) != string::npos) {
+                cout << "found: " << Search << "line: " << curLine << endl;
+            }
+            else {
+              cout<<"Monster not found!"<<endl;
+            }
+          TypingFile.close();
+          cout<<"Search Complete!";
+        }
       }
     }
     else if (cin.fail()) {
@@ -327,7 +329,7 @@ int main() {
     cin>>Userchoice;
     if (Userchoice == 1) {
       cout<<"Start a battle has been selected!"<<endl;
-      Battle();
+      MonsterSelection();
     }
     else if (Userchoice == 2) {
       cout<<"Battle Index has been selected!"<<endl;
