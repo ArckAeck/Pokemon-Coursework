@@ -40,7 +40,11 @@ class Monster {
     void SetHealth(int NewHealth) {
       Health = NewHealth;
     }
-    void Attack(Monster Enemy) {     
+    void Attack(Monster Enemy) {
+      string input;
+      cout<<"jajajajjaja attack does nothing rn";
+      cin>>input;
+      
     }
     void OutputStats() {
       cout<<"\nName: "<<GetName()<<"\nType: "<<GetType()<<"\nHealth: "<<GetHealth()<<"\nSpeed: "<<GetSpeed()<<endl;
@@ -102,11 +106,11 @@ class FireMonster : public Monster {
             cout<<"Blaze Kick was activated!"<<endl;
             Enemy.SetHealth(Enemy.GetHealth() + HPChange);
             cout<<Enemy.GetName()<<"'s Health is now "<<Enemy.GetHealth()<<endl;
-          }
+          }      
           else {
             cout<<"Blaze Kick failed! "<<Enemy.GetName()<<"'s Health remains the same";
           }
-        }
+        }       
         else if (cin.fail()) {
           cin.clear();
           cin.ignore();
@@ -163,7 +167,6 @@ void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     }
   }
   }
-
 void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
   while (true) {
     int RandomNumber = GenerateNumber(1,Map.size());
@@ -178,6 +181,7 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     }
   }
   }
+
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
   //bool End = false;
@@ -265,6 +269,14 @@ void MonsterSelection() {
       CurrentMonster.OutputStats();
       BotSwitchMonster(BotMonsters,OpponentMonster);
       OpponentMonster.OutputStats();
+      while (CurrentMonster.GetHealth() > 0 && OpponentMonster.GetHealth() > 0) {
+        if (CurrentMonster.GetSpeed() > OpponentMonster.GetSpeed()) {
+          CurrentMonster.Attack(OpponentMonster);
+        }
+        else {
+          OpponentMonster.Attack(CurrentMonster);
+        }
+      }
       break;
     }
     else if (BattleType == 2) {
