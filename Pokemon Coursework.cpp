@@ -57,8 +57,6 @@ class Monster {
         return false;
       }
     }
-
-    
 };  
 class FireMonster : public Monster {
   public:
@@ -188,9 +186,11 @@ void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
     cin>>Input;
     if (Input == 1) {
       Player.Attack(Enemy);
+      break;
     }
     else if (Input == 2) {
       PlayerSwitchMonster(Map, Player);
+      break;
     }
     else if (cin.fail()) {
       cin.clear();
@@ -203,7 +203,16 @@ void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
   }
   }
 
-
+void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
+  int RandomSelection = GenerateNumber(1,2);
+  if (RandomSelection == 1) {
+    Bot.Attack(Enemy);
+  }
+  else {
+    BotSwitchMonster(Map, Bot);
+  }
+  
+}
 
 
 
@@ -297,13 +306,12 @@ void MonsterSelection() {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
       Monster OpponentMonster = BotMonsters.begin()->second;
-      PlayerSwitchMonster(Player1Monsters,CurrentMonster);
       CurrentMonster.OutputStats();
-      BotSwitchMonster(BotMonsters,OpponentMonster);
       OpponentMonster.OutputStats();
       while (CurrentMonster.GetHealth() > 0 && OpponentMonster.GetHealth() > 0) {
         if (CurrentMonster.GetSpeed() > OpponentMonster.GetSpeed()) {
           PlayerBattleMenu(Player1Monsters,CurrentMonster,OpponentMonster);
+      
         }
         else {
           cout<<"k bruh";
@@ -422,6 +430,7 @@ void TypingInformation() {
     cerr<<"File was unable to be opened!"; 
   }
 }
+
 int main() {
   int Userchoice;  
   while (true) {
