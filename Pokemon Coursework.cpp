@@ -181,6 +181,38 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     }
   }
   }
+void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
+  int Input;
+  while (true) {
+    cout<<"What would you like to do?\n1 - Use a move\n2 - Switch current monster"<<endl;
+    cin>>Input;
+    if (Input == 1) {
+      Player.Attack(Enemy);
+    }
+    else if (Input == 2) {
+      PlayerSwitchMonster(Map, Player);
+    }
+    else if (cin.fail()) {
+      cin.clear();
+      cin.ignore();
+      cout<<"Wrong data type entered! Try Again!\n";
+    }
+    else {
+      cout<<"Invalid number entered! Try again!\n";
+    }
+  }
+  }
+
+
+
+
+
+
+
+
+
+
+
 
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
@@ -271,10 +303,10 @@ void MonsterSelection() {
       OpponentMonster.OutputStats();
       while (CurrentMonster.GetHealth() > 0 && OpponentMonster.GetHealth() > 0) {
         if (CurrentMonster.GetSpeed() > OpponentMonster.GetSpeed()) {
-          CurrentMonster.Attack(OpponentMonster);
+          PlayerBattleMenu(Player1Monsters,CurrentMonster,OpponentMonster);
         }
         else {
-          OpponentMonster.Attack(CurrentMonster);
+          cout<<"k bruh";
         }
       }
       break;
@@ -390,7 +422,6 @@ void TypingInformation() {
     cerr<<"File was unable to be opened!"; 
   }
 }
-
 int main() {
   int Userchoice;  
   while (true) {
