@@ -7,6 +7,7 @@
 #include <iterator>
 using namespace std;
 
+// Function to generate a random number between a minimum and maximum value
 int GenerateNumber(short min, short max) {
   srand(time(0));
   short RanNum = (rand()%(max - min + 1)) + min;
@@ -42,7 +43,8 @@ class Monster {
     }
     void Attack(Monster Enemy) {
       string input;
-      cout<<"jajajajjaja attack does nothing rn";
+      Enemy.SetHealth(Enemy.GetHealth() - GenerateNumber(1, 10));
+      cout<<Enemy.GetHealth();
       cin>>input;
       
     }
@@ -170,8 +172,8 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     int RandomNumber = GenerateNumber(1,Map.size());
     auto it=Map.find(RandomNumber);
     if (it != Map.end()) {
-      cout<<"CPU has switched monster!"<<endl;
       SelectedMonster = it->second;
+      cout<<"CPU has switched monster!"<<endl;
       break;
     }
     else {
@@ -202,7 +204,6 @@ void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
     }
   }
   }
-
 void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
   int RandomSelection = GenerateNumber(1,2);
   if (RandomSelection == 1) {
@@ -214,32 +215,24 @@ void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
   
 }
 
-
-
-
-
-
-
-
-
-
 void MonsterSelection() {
-  int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1;
-  //bool End = false;
+  int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1; 
   string MonsterTeam[] = {};
-  map<int, Monster> MonsterList,Player1Monsters, Player2Monsters;
-  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60) ;
-  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza));
+  map<int, Monster> MonsterList,Player1Monsters, Player2Monsters, BotMonsters; /* 4 maps are created using
+            an intenger as a key and storing a monster object as the value*/
+  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60) ; // Monster objects are created
+  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
     if (NumberOfMonsters == 3 || NumberOfMonsters == 6) {
       cout<<NumberOfMonsters<<" Monsters for battle selected!\n";
-      break;
+      break; //
     }  
     else if (NumberOfMonsters == 1) {
-      cout<<NumberOfMonsters<<" Monster for battle selected!\n";
-      break;
+      cout<<NumberOfMonsters<<" Monster for battle selected!\n"; /* if statement for if a user enters 1 as the number of monsters
+          they would like to fight with it is separated for grammatical sense and since it is valid loop is ended */
+      break;   
     }
     else if (cin.fail()) {
       cin.clear();
@@ -285,7 +278,6 @@ void MonsterSelection() {
     if (BattleType == 1) {
       cout<<"PVE Battle has been selected!"<<endl;
       int EnemySize = 0, EnemyNumber = 1;
-      map<int, Monster> BotMonsters;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,6);
         auto it=MonsterList.find(NewNumber);
@@ -306,12 +298,13 @@ void MonsterSelection() {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
       Monster OpponentMonster = BotMonsters.begin()->second;
+      BotSwitchMonster(BotMonsters, OpponentMonster);
       CurrentMonster.OutputStats();
       OpponentMonster.OutputStats();
       while (CurrentMonster.GetHealth() > 0 && OpponentMonster.GetHealth() > 0) {
         if (CurrentMonster.GetSpeed() > OpponentMonster.GetSpeed()) {
           PlayerBattleMenu(Player1Monsters,CurrentMonster,OpponentMonster);
-      
+          BotBattleMenu(BotMonsters,OpponentMonster,CurrentMonster);  
         }
         else {
           cout<<"k bruh";
@@ -369,25 +362,24 @@ void BattleIndex() {
   while (true) {
     cout<<"\nWhat would you like to do?\n1 - Display entire battle index\n2 - Search for a Monster in battle index"<<endl;
     cin>>Choice;
-    ifstream TypingFile("BattleIndex.txt");
+    ifstream TypingFile("BattleIndex.txt"); //opens battle index file 
     if (Choice == 1) {
       string line;
         ifstream BattleIndexFile("BattleIndex.txt");
-        if (BattleIndexFile.is_open()) {
-          while (getline(BattleIndexFile, line)) { 
+        if (BattleIndexFile.is_open()) { //checks if battle index file is open
+          while (getline(BattleIndexFile, line)) {  //while loop to read each line of the file
             cout <<line<< endl; 
           }
-          BattleIndexFile.close();
+          BattleIndexFile.close(); //file is closed
         }
         else {
-          cerr<<"File was unable to be opened!"; 
+          cerr<<"File was unable to be opened!"; //error message if file is not open  
         }
         break;
       }
     else if (Choice == 2) {
       string Search,Line;
-      ifstream TypingFile("BattleIndex.txt");
-      TypingFile.open("BattleIndex.txt");
+      ifstream TypingFile("BattleIndex.txt"); //opens battle index file
       cout<<"Enter the name of the monster you would like to search for!";
       cin>>Search;
       unsigned int curLine = 0;
@@ -417,50 +409,49 @@ void BattleIndex() {
   }
 }
 
-void TypingInformation() {
+void TypingInformation() { //function to display typing information from a text file 
   string line;
-  ifstream TypingFile("TypingMatchups.txt");
-  if (TypingFile.is_open()) {
-    while (getline(TypingFile, line)) { 
+  ifstream TypingFile("TypingMatchups.txt"); //file is opened
+  if (TypingFile.is_open()) { //checks if typing matchups file is open
+    while (getline(TypingFile, line)) { //while loop to read each line of the file
       cout <<line<< endl; 
     }
-    TypingFile.close();
+    TypingFile.close(); //file is closed
   }
   else {
-    cerr<<"File was unable to be opened!"; 
+    cerr<<"File was unable to be opened!";  //error message if file is not open 
   }
 }
 
-int main() {
+int main() { //function for running main menu that displays all the options a user can choose from 
   int Userchoice;  
   while (true) {
     cout<<"\nWelcome to the monster battle simulator! what would you like to do?\n1 - Start a battle\n2 - Battle Index\n3 - Typing Information\n4 - Quit\n";
     cin>>Userchoice;
     if (Userchoice == 1) {
       cout<<"Start a battle has been selected!"<<endl;
-      MonsterSelection();
+      MonsterSelection(); //if user enters 1 then the function for selecting monsters for battles is run
     }
     else if (Userchoice == 2) {
       cout<<"Battle Index has been selected!"<<endl;
-      BattleIndex();
-      
+      BattleIndex(); //if user enters 2 then battle index function is run 
     }
     else if (Userchoice == 3) {
       cout<<"Typing information has been selected!"<<endl;
-      TypingInformation();
+      TypingInformation(); //if user enters 3 then function for displaying information from typingmatchups text file is run
     }
     else if (Userchoice == 4) {
       cout<<"Exit has been selected program will now cease running!"<<endl;
-      break;
+      break; //this is the option for quitting the program it is the only option to stop the loop 
     }
     else if (cin.fail()) {
-      cin.clear();
-      cin.ignore();
-      cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
+      cin.clear(); //clears the error flag input   
+      cin.ignore(); //ignore the remaining input 
+      cout<<"Invalid! Wrong data type!\n\n\n"<<endl; //error testing for if a user enters anything other than a number
     }
      
     else {
-      cout<<"That is an invalid Number! Try again!\n\n\n";
+      cout<<"That is an invalid Number! Try again!\n\n\n"; //error tests if number is out of range 
     
     }
   }
