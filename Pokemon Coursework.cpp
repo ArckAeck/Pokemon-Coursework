@@ -379,6 +379,7 @@ void BattleIndex() {
       }
     else if (Choice == 2) {
       string Search,Line;
+      bool found = false;
       ifstream TypingFile("BattleIndex.txt"); //opens battle index file
       cout<<"Enter the name of the monster you would like to search for!";
       cin>>Search;
@@ -387,14 +388,18 @@ void BattleIndex() {
           curLine++;
           if (Line.find(Search) != string::npos) {
               cout<<Line<<endl;
+              found = true;
               break;
             }
           else {
-            cout<<"Monster not found!"<<endl;
-            }
+            continue;
+          }
       }
       TypingFile.close();
-      
+      if (found == false) {
+        cout<<"Sorry that monster could not be found";
+      }
+      break;
     }
     else if (cin.fail()) {
       cin.clear();
