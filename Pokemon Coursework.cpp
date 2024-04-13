@@ -386,7 +386,7 @@ void BattleIndex() {
       while(getline(TypingFile, Line)) {
           curLine++;
           if (Line.find(Search) != string::npos) {
-              cout << "found: " << Search << "line: " << curLine << endl;
+              cout<<Line<<endl;
             }
           else {
             cout<<"Monster not found!"<<endl;
