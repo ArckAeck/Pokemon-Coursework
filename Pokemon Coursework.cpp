@@ -387,14 +387,14 @@ void BattleIndex() {
           curLine++;
           if (Line.find(Search) != string::npos) {
               cout<<Line<<endl;
+              break;
             }
           else {
             cout<<"Monster not found!"<<endl;
             }
-        TypingFile.close();
-        cout<<"Search Complete!";
-        break;
       }
+      TypingFile.close();
+      
     }
     else if (cin.fail()) {
       cin.clear();
