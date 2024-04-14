@@ -58,6 +58,9 @@ class Monster {
         return false;
       }
     }
+  void DestroyMonster(Monster* monster) {
+    delete monster;
+  }
 };  
 class FireMonster : public Monster {
   public:
@@ -121,7 +124,6 @@ class FireMonster : public Monster {
     }
   }
 };
-
 class WaterMonster : public Monster {
   public:
     int CheckDamage(int PrevDamage, Monster Enemy) {
@@ -172,7 +174,8 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     auto it=Map.find(RandomNumber);
     if (it != Map.end()) {
       SelectedMonster = it->second;
-      cout<<"CPU has switched monster!"<<endl;
+      cout<<"Computer has switched monster to: "<<SelectedMonster.GetName()<<"\nCurrent Computer Monster:"<<endl;
+      SelectedMonster.OutputStats();
       break;
     }
     else {
@@ -210,9 +213,29 @@ void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
   }
   else {
     BotSwitchMonster(Map, Bot);
-  }
-  
+  } 
 }
+void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monster> EnemyTeam, Monster &Enemy, string BattleType) {
+  if (BattleType == "PVE") {
+  while (true) {
+    if (Player.GetSpeed() > Enemy.GetSpeed()) {
+    PlayerBattleMenu(PlayerTeam,Player,Enemy);
+    BotBattleMenu(EnemyTeam,Enemy,Player);  
+    }
+    else {
+      PlayerBattleMenu(PlayerTeam,Player,Enemy);
+      BotBattleMenu(EnemyTeam,Enemy,Player);    
+    }
+  }
+  }
+  else {
+    cout<<"UnderConstruction";
+  }
+}
+
+
+
+
 
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1; 
@@ -297,18 +320,11 @@ void MonsterSelection() {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
       Monster OpponentMonster = BotMonsters.begin()->second;
-      BotSwitchMonster(BotMonsters, OpponentMonster);
+      cout<<"Player 1's starting monster is: "<<endl;
       CurrentMonster.OutputStats();
+      cout<<"Computer's starting monster is: "<<endl;
       OpponentMonster.OutputStats();
-      while (CurrentMonster.GetHealth() > 0 && OpponentMonster.GetHealth() > 0) {
-        if (CurrentMonster.GetSpeed() > OpponentMonster.GetSpeed()) {
-          PlayerBattleMenu(Player1Monsters,CurrentMonster,OpponentMonster);
-          BotBattleMenu(BotMonsters,OpponentMonster,CurrentMonster);  
-        }
-        else {
-          cout<<"k bruh";
-        }
-      }
+      GameplayLoop(Player1Monsters,CurrentMonster,BotMonsters,OpponentMonster,"PVE");   
       break;
     }
     else if (BattleType == 2) {
@@ -340,8 +356,11 @@ void MonsterSelection() {
               }
       }
       Monster OpponentMonster = Player2Monsters.begin()->second;
+      cout<<"Player 1's starting monster is: "<<endl;
       CurrentMonster.OutputStats();
+      cout<<"Player 2's starting monster is: "<<endl;
       OpponentMonster.OutputStats();
+      GameplayLoop(Player1Monsters,CurrentMonster,Player2Monsters,OpponentMonster,"PVP");
       break;
     }
     else if (cin.fail()) {
@@ -412,7 +431,6 @@ void BattleIndex() {
     }
   }
 }
-
 void TypingInformation() { //function to display typing information from a text file 
   string line;
   ifstream TypingFile("TypingMatchups.txt"); //file is opened
