@@ -219,22 +219,30 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
   if (BattleType == "PVE") {
   while (true) {
     if (Player.GetSpeed() > Enemy.GetSpeed()) {
-    PlayerBattleMenu(PlayerTeam,Player,Enemy);
-    BotBattleMenu(EnemyTeam,Enemy,Player);  
+      cout<<"\nPlayer 1's speed is faster than computer so they have their turn!";
+      PlayerBattleMenu(PlayerTeam,Player,Enemy);
+      BotBattleMenu(EnemyTeam,Enemy,Player);  
     }
     else {
-      PlayerBattleMenu(PlayerTeam,Player,Enemy);
+      cout<<"\nComputer's speed is faster than player's so they have their turn!";
       BotBattleMenu(EnemyTeam,Enemy,Player);    
+      PlayerBattleMenu(PlayerTeam,Player,Enemy);
     }
   }
   }
   else {
-    cout<<"UnderConstruction";
+    if (Player.GetSpeed() > Enemy.GetSpeed()) {
+      cout<<"\nPlayer 1's speed is faster than player 2 so they have their turn!";
+      PlayerBattleMenu(PlayerTeam,Player,Enemy);
+      BotBattleMenu(EnemyTeam,Enemy,Player);  
+  }
+    else {
+        cout<<"\nPlayer 2's speed is faster than player 1's so they have their turn!";
+        PlayerBattleMenu(EnemyTeam,Enemy,Player); 
+        PlayerBattleMenu(PlayerTeam,Player,Enemy);   
   }
 }
-
-
-
+}
 
 
 void MonsterSelection() {
