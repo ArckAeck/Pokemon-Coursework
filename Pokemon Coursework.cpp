@@ -219,8 +219,8 @@ void MonsterSelection() {
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters, BotMonsters; /* 4 maps are created using
             an intenger as a key and storing a monster object as the value*/
-  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60) ; // Monster objects are created
-  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
+  Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60),Nyrados("Nyrados","Water",135,25), Tentadrool("Tentadrool","Water",100,140), Electafuzz("Electafuzz","Electric",110,120), Rapdos("Rapdos","Electric",100,160), Blaziben("Blaziben","Fire",120,120),Raixen("Raixen","Fire",130,130); // Monster objects are created
+  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)), MonsterList.insert(pair<int, Monster>(7,Nyrados)),MonsterList.insert(pair<int, Monster>(8,Tentadrool)),MonsterList.insert(pair<int, Monster>(9,Electafuzz)),MonsterList.insert(pair<int, Monster>(10,Rapdos)),MonsterList.insert(pair<int, Monster>(11,Blaziben)),MonsterList.insert(pair<int, Monster>(12,Raixen)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -278,7 +278,7 @@ void MonsterSelection() {
       cout<<"PVE Battle has been selected!"<<endl;
       int EnemySize = 0, EnemyNumber = 1;
       while (EnemySize < Player1Monsters.size()) {
-        int NewNumber = GenerateNumber(1,6);
+        int NewNumber = GenerateNumber(1,12);
         auto it=MonsterList.find(NewNumber);
         if (it != MonsterList.end()) {
           BotMonsters.insert(pair<int, Monster>(EnemyNumber,it->second));
