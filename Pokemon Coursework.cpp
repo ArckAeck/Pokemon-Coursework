@@ -9,7 +9,7 @@ using namespace std;
 
 class FireMonster : public Monster {
   public:
-    int CheckDamage(int PrevDamage, Monster Enemy) {
+    int CheckDamage(int PrevDamage, Monster &Enemy) {
       if (Enemy.GetType() == "Water") {
         PrevDamage /= GenerateNumber(2,3);
         cout<<"It was not very effective!";
@@ -20,7 +20,7 @@ class FireMonster : public Monster {
       }
       return PrevDamage;
     }
-    void Attack(Monster Enemy) {
+    void Attack(Monster &Enemy) {
       int AttackChoice, HPChange, TypeDamage, ChanceOfHappening;
       while (true) {
         cout<<"Here Are the Available Moves 1 - Flamethrower\n2 - Flame of Life\n3 - Blaze Kick"<<endl;
@@ -142,10 +142,11 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
 void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
   int Input;
   while (true) {
-    cout<<"What would you like to do?\n1 - Use a move\n2 - Switch current monster"<<endl;
+    cout<<"What would you like to do?\n1 - Use a move\n2 - Switch current monster\nYour current monster statics"<<endl;
+    Player.OutputStats();
     cin>>Input;
     if (Input == 1) {
-      Player.Attack(Enemy);
+      Player.Attack(Enemy,"Player");
       break;
     }
     else if (Input == 2) {
@@ -165,7 +166,7 @@ void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
 void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
   int RandomSelection = GenerateNumber(1,2);
   if (RandomSelection == 1) {
-    Bot.Attack(Enemy);
+    Bot.Attack(Enemy,"Computer");
   }
   else {
     BotSwitchMonster(Map, Bot);
@@ -179,21 +180,35 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
       if (Enemy.IsAlive() == false) {
         cout<<Enemy.GetName()<<" has fainted!";
+        if (EnemyTeam.size() == 1) {
+          cout<<"Player has won the battle!"; 
+          break;
+        } 
         BotSwitchMonster(EnemyTeam, Enemy);
         DestroyMonster(EnemyTeam, Enemy);
       }
       BotBattleMenu(EnemyTeam,Enemy,Player);  
       if (Player.IsAlive() == false) {
         cout<<Player.GetName()<<" has fainted!";
+        if (PlayerTeam.size() == 0) {
+          cout<<"Computer has won the battle!";
+          break;
+        }
         PlayerSwitchMonster(PlayerTeam, Player);
         DestroyMonster(PlayerTeam, Player);
       }
-      continue;
+      else {
+        continue;
+          }
     }
     else {
-      cout<<"\nComputer's speed is faster than player's so they have their turn!";
+      cout<<"\nComputer's speed is faster than player's so they have their turn!\n";
       BotBattleMenu(EnemyTeam,Enemy,Player); 
       if (Player.IsAlive() == false) {
+        if (PlayerTeam.size() == 1) {
+          cout<<Player.GetName()<<"Computer has won the battle!"<<endl;
+          break;
+        }
         cout<<Player.GetName()<<" has fainted!";
         PlayerSwitchMonster(PlayerTeam, Player);
         DestroyMonster(PlayerTeam, Player);
@@ -201,31 +216,79 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
       if (Enemy.IsAlive() == false) {
         cout<<Enemy.GetName()<<" has fainted!";
+        if (EnemyTeam.size() == 1) {
+          cout<<"Player has won the battle!"<<endl;
+          break;
+        }
         BotSwitchMonster(EnemyTeam, Enemy);
         DestroyMonster(EnemyTeam, Enemy);
-      }
+      } 
+      else {
       continue;
+      }   
     }
-  }   
   }
+}
   else {
+    while (true) {
     if (Player.GetSpeed() > Enemy.GetSpeed()) {
       cout<<"\nPlayer 1's speed is faster than player 2 so they have their turn!";
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
-      BotBattleMenu(EnemyTeam,Enemy,Player);  
-  }
-    else {
+      if (Enemy.IsAlive() == false) {
+        cout<<Enemy.GetName()<<" has fainted!";
+        if (EnemyTeam.size() == 1) {
+          cout<<"Player has won the battle!"; 
+           break;
+        }
+        PlayerSwitchMonster(EnemyTeam, Enemy);
+        DestroyMonster(EnemyTeam, Enemy);
+      }
+      PlayerBattleMenu(EnemyTeam,Enemy,Player);  
+      if (Player.IsAlive() == false) {
+        cout<<Player.GetName()<<" has fainted!";
+        if (PlayerTeam.size() == 1) {
+          cout<<"Player 2 has won the battle!";
+          break;
+        }  
+        PlayerSwitchMonster(PlayerTeam, Player);
+        DestroyMonster(PlayerTeam, Player);
+      }
+      else {
+        continue;
+      }
+    }
+      else {
         cout<<"\nPlayer 2's speed is faster than player 1's so they have their turn!";
         PlayerBattleMenu(EnemyTeam,Enemy,Player); 
-        PlayerBattleMenu(PlayerTeam,Player,Enemy);   
+        if (Player.IsAlive() == false)
+          cout<<Player.GetName()<<" has fainted!";
+          if (PlayerTeam.size() == 1) {
+            cout<<"Player 2 has won the battle!"<<endl;
+            break;
+          }
+          PlayerSwitchMonster(PlayerTeam, Player);
+          DestroyMonster(PlayerTeam, Player);
+        }
+        PlayerBattleMenu(PlayerTeam,Player,Enemy);
+        if (Enemy.IsAlive() == false) {
+          cout<<Enemy.GetName()<<" has fainted!";
+          if (EnemyTeam.size() == 1) {
+            cout<<"Player has won the battle!"<<endl;
+            break;
+          }
+          PlayerSwitchMonster(EnemyTeam, Enemy);
+          DestroyMonster(EnemyTeam, Enemy);
+        }
+        else {
+        continue;
+        }
+    }
   }
-}
 }
 void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1; 
   string MonsterTeam[] = {};
-  map<int, Monster> MonsterList,Player1Monsters, Player2Monsters, BotMonsters; /* 4 maps are created using
-            an intenger as a key and storing a monster object as the value*/
+  map<int, Monster> MonsterList,Player1Monsters, Player2Monsters, BotMonsters; 
   MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)), MonsterList.insert(pair<int, Monster>(7,Nyrados)),MonsterList.insert(pair<int, Monster>(8,Tentadrool)),MonsterList.insert(pair<int, Monster>(9,Electafuzz)),MonsterList.insert(pair<int, Monster>(10,Rapdos)),MonsterList.insert(pair<int, Monster>(11,Blaziben)),MonsterList.insert(pair<int, Monster>(12,Raixen)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
