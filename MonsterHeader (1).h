@@ -60,9 +60,10 @@ class Monster {
       }
     }
 }; 
-
 class FireMonster : public Monster {
   public:
+    FireMonster(string N, string T, int H, int S) : Monster(N, T, H, S) {
+    }
     int CheckDamage(int PrevDamage, Monster &Enemy) {
       if (Enemy.GetType() == "Water") {
         PrevDamage /= GenerateNumber(2,3);
@@ -128,6 +129,8 @@ class FireMonster : public Monster {
 };
 class WaterMonster : public Monster {
   public:
+    WaterMonster(string N, string T, int H, int S) : Monster(N, T, H, S) {
+    }
     int CheckDamage(int PrevDamage, Monster &Enemy) {
       if (Enemy.GetType() == "Fire") {
         PrevDamage *= GenerateNumber(2,3);
@@ -145,7 +148,30 @@ class WaterMonster : public Monster {
     }
   }
 };
+class DragonMonster: public Monster {
+  public:
+    DragonMonster(string N, string T, int H, int S) : Monster(N, T, H, S) {
+    }
+};
+class ElectricMonster: public Monster {
+  public:
+    ElectricMonster(string N, string T, int H, int S) : Monster(N, T,H,S) {
+    }
+};
+
+class RockMonster: public Monster {
+  public:
+    RockMonster(string N, string T, int H, int S) : Monster(N, T, H, S) {
+    }
+};
+
+
+
 
 //Monster objects are created
-Monster Pikacho("Pikacho","Electric",100,30), Charmanker("Charmanker","Fire",95,15), Dragonknight("Dragonknight","Dragon",130,50), Daggron("Daggron","Rock",120,25), Drenchninja("Drenchninja","Water",110,45), Raygaza("Raygaza","Dragon",150,60),Nyrados("Nyrados","Water",135,25), Tentadrool("Tentadrool","Water",100,140), Electafuzz("Electafuzz","Electric",110,120), Rapdos("Rapdos","Electric",100,160), Blaziben("Blaziben","Fire",120,120),Raixen("Raixen","Fire",130,130);
+RockMonster Daggron("Daggron","Rock",120,25);
+FireMonster Charmanker("Charmanker","Fire",95,15), Blaziben("Blaziben","Fire",120,120),Raixen("Raixen","Fire",130,130);
+WaterMonster Drenchninja("Drenchninja","Water",110,45), Nyrados("Nyrados","Water",135,25),Tentadrool("Tentadrool","Water",100,140);
+DragonMonster Dragonknight("Dragonknight","Dragon",130,50), Raygaza("Raygaza","Dragon",150,60); 
+ElectricMonster Pikacho("Pikacho","Electric",100,30),Rapdos("Rapdos","Electric",100,160), Electafuzz("Electafuzz","Electric",110,120); 
 
