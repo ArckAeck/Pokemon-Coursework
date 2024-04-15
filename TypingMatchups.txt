@@ -1,5 +1,0 @@
-Monster Type  /	 Effective Against   /   Weak Against	
-Fire:               Dragon                  Water
-Water:              Fire                    Electric
-Electric:	          Water                   Rock                        
-Dragon:             Rock                    Fire
