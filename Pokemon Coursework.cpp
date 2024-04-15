@@ -71,7 +71,7 @@ class FireMonster : public Monster {
 };
 class WaterMonster : public Monster {
   public:
-    int CheckDamage(int PrevDamage, Monster Enemy) {
+    int CheckDamage(int PrevDamage, Monster &Enemy) {
       if (Enemy.GetType() == "Fire") {
         PrevDamage *= GenerateNumber(2,3);
         cout<<"It was very effective!";
@@ -96,7 +96,6 @@ void DestroyMonster(map<int, Monster> &monsterMap, Monster &monster) {
         }
     }
 }
-
 void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
   int Input;
   while (true) {
@@ -107,6 +106,10 @@ void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     cin>>Input;
     auto it=Map.find(Input);
     if (it != Map.end()) {
+      if (it->second.GetName() == SelectedMonster.GetName()) {
+        cout<<"You already have this monster selected!"<<endl;
+        continue;
+      }
       SelectedMonster = it->second;
       cout<<"Player has switched monster to: "<<SelectedMonster.GetName()<<"\nCurrent Player Monster:"<<endl;
       SelectedMonster.OutputStats();
@@ -129,6 +132,9 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     int RandomNumber = GenerateNumber(1,Map.size());
     auto it=Map.find(RandomNumber);
     if (it != Map.end()) {
+      if (it->second.GetName() == SelectedMonster.GetName()) {
+        continue;
+      }
       SelectedMonster = it->second;
       cout<<"Computer has switched monster to: "<<SelectedMonster.GetName()<<"\nCurrent Computer Monster:"<<endl;
       SelectedMonster.OutputStats();
