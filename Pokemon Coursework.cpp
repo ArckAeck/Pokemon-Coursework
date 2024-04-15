@@ -6,9 +6,7 @@
 #include <string>
 #include "MonsterHeader.h"
 using namespace std;
-
-
-void DestroyMonster(map<int, Monster> &monsterMap, Monster &monster) {
+void DestroyMonster(map<int, Monster> &monsterMap, Monster &monster) { //removes monster from map
     for (auto it = monsterMap.begin(); it != monsterMap.end(); ++it) {
         if (it->second.GetName() == monster.GetName()) { 
             monsterMap.erase(it);
@@ -21,18 +19,18 @@ void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
   while (true) {
     cout<<"Please select the monster you would like to switch your current monster to!"<<endl;
     for (auto& pair : Map) {
-      cout<<pair.first<<" - "<<pair.second.GetName()<<endl;
+      cout<<pair.first<<" - "<<pair.second.GetName()<<endl; //Displays all monsters in map
         }
     cin>>Input;
     auto it=Map.find(Input);
-    if (it != Map.end()) {
-      if (it->second.GetName() == SelectedMonster.GetName()) {
+    if (it != Map.end()) { //If name is in map but is currently selected
+      if (it->second.GetName() == SelectedMonster.GetName()) { 
         cout<<"You already have this monster selected!"<<endl;
         continue;
       }
       SelectedMonster = it->second;
       cout<<"Player has switched monster to: "<<SelectedMonster.GetName()<<"\nCurrent Player Monster:"<<endl;
-      SelectedMonster.OutputStats();
+      SelectedMonster.OutputStats(); //If name is in map but isn't currently selected and currentmonster parameter is switched
       break;
     }
     else if (cin.fail()) {
@@ -40,9 +38,11 @@ void PlayerSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
       cin.ignore();
       cout<<"Wrong data type entered! Try Again!\n";
       continue;
+      //If wrong data type is entered error 
     }
     else {
       cout<<"Invalid monster number entered! Try again!\n";
+      //if invalid number is entered for monster key
       continue;
     }
   }
@@ -53,11 +53,11 @@ void BotSwitchMonster(map<int, Monster> &Map, Monster &SelectedMonster) {
     auto it=Map.find(RandomNumber);
     if (it != Map.end()) {
       if (it->second.GetName() == SelectedMonster.GetName()) {
-        continue;
+        continue; //if random number generated key is equal to current monster key then try again
       }
       SelectedMonster = it->second;
       cout<<"Computer has switched monster to: "<<SelectedMonster.GetName()<<"\nCurrent Computer Monster:"<<endl;
-      SelectedMonster.OutputStats();
+      SelectedMonster.OutputStats(); //random number generated key is not equal to current monster key and currentmonster parameter is switched
       break;
     }
     else {
@@ -69,23 +69,26 @@ void PlayerBattleMenu(map<int, Monster> &Map,Monster &Player, Monster &Enemy) {
   int Input;
   while (true) {
     cout<<"What would you like to do?\n1 - Use a move\n2 - Switch current monster\nYour current monster statics"<<endl;
-    Player.OutputStats();
+    Player.OutputStats(); //Users current monster selects what they want to do
     cin>>Input;
     if (Input == 1) {
       Player.Attack(Enemy,"Player");
-      break;
+      break; //if user selects 1 then player attacks enemy function is run
     }
     else if (Input == 2) {
       PlayerSwitchMonster(Map, Player);
+      //if user selects 2 then player switches monster function is run
       break;
     }
     else if (cin.fail()) {
       cin.clear();
       cin.ignore();
       cout<<"Wrong data type entered! Try Again!\n";
+      //if user inputs wrong data type 
     }
     else {
       cout<<"Invalid number entered! Try again!\n";
+      //user enters invalid number then error is displayed
     }
   }
   }
@@ -93,35 +96,47 @@ void BotBattleMenu(map<int, Monster> &Map,Monster &Bot, Monster &Enemy) {
   int RandomSelection = GenerateNumber(1,2);
   if (RandomSelection == 1) {
     Bot.Attack(Enemy,"Computer");
+    //Bot randomly selects what it would like to do if 1 it chooses to attack
   }
   else {
     BotSwitchMonster(Map, Bot);
+    //else just switches monster
   } 
 }
 void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monster> EnemyTeam, Monster &Enemy, string BattleType) {
   if (BattleType == "PVE") {
+    //if battle is PVE then this is run
   while (true) {
     if (Player.GetSpeed() > Enemy.GetSpeed()) {
       cout<<"\nPlayer 1's speed is faster than computer so they have their turn!\n"<<endl;
+      //whoever has fastest speed gets first turn
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
       if (Enemy.IsAlive() == false) {
         cout<<Enemy.GetName()<<" has fainted!";
-        if (EnemyTeam.size() == 1) {
+        //if enemy loses all their health
+         DestroyMonster(EnemyTeam, Enemy);
+        //Remove enemy from their map
+        if (EnemyTeam.size() == 0) {
           cout<<"Player has won the battle!"; 
+          //if enemy has no remaining monsters
           break;
         } 
-        BotSwitchMonster(EnemyTeam, Enemy);
-        DestroyMonster(EnemyTeam, Enemy);
+        BotSwitchMonster(EnemyTeam, Enemy);  
+        //now its the enemies turn
       }
       BotBattleMenu(EnemyTeam,Enemy,Player);  
       if (Player.IsAlive() == false) {
         cout<<Player.GetName()<<" has fainted!";
+        //if player loses all their health
+        DestroyMonster(PlayerTeam, Player);
         if (PlayerTeam.size() == 0) {
+          //if player loses all their monsters computer wins
           cout<<"Computer has won the battle!";
           break;
         }
+        /* ALL THE CODE BELOW USES THE SAME LOGIC AS THIS PART JUST FOR DIFFERENT OUTCOMES SO IS NOT COMMENTED*/
         PlayerSwitchMonster(PlayerTeam, Player);
-        DestroyMonster(PlayerTeam, Player);
+        
       }
       else {
         continue;
@@ -131,23 +146,23 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
       cout<<"\nComputer's speed is faster than player's so they have their turn!\n";
       BotBattleMenu(EnemyTeam,Enemy,Player); 
       if (Player.IsAlive() == false) {
-        if (PlayerTeam.size() == 1) {
+        cout<<Player.GetName()<<" has fainted!";
+        DestroyMonster(PlayerTeam, Player);
+        if (PlayerTeam.size() == 0) {
           cout<<Player.GetName()<<"Computer has won the battle!"<<endl;
           break;
         }
-        cout<<Player.GetName()<<" has fainted!";
         PlayerSwitchMonster(PlayerTeam, Player);
-        DestroyMonster(PlayerTeam, Player);
       }
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
       if (Enemy.IsAlive() == false) {
         cout<<Enemy.GetName()<<" has fainted!";
-        if (EnemyTeam.size() == 1) {
+        DestroyMonster(EnemyTeam, Enemy);
+        if (EnemyTeam.size() == 0) {
           cout<<"Player has won the battle!"<<endl;
           break;
         }
         BotSwitchMonster(EnemyTeam, Enemy);
-        DestroyMonster(EnemyTeam, Enemy);
       } 
       else {
       continue;
@@ -162,22 +177,22 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
       PlayerBattleMenu(PlayerTeam,Player,Enemy);
       if (Enemy.IsAlive() == false) {
         cout<<Enemy.GetName()<<" has fainted!";
-        if (EnemyTeam.size() == 1) {
+        DestroyMonster(EnemyTeam, Enemy);
+        if (EnemyTeam.size() == 0) {
           cout<<"Player has won the battle!"; 
            break;
         }
         PlayerSwitchMonster(EnemyTeam, Enemy);
-        DestroyMonster(EnemyTeam, Enemy);
       }
       PlayerBattleMenu(EnemyTeam,Enemy,Player);  
       if (Player.IsAlive() == false) {
         cout<<Player.GetName()<<" has fainted!";
-        if (PlayerTeam.size() == 1) {
+        DestroyMonster(PlayerTeam, Player);
+        if (PlayerTeam.size() == 0) {
           cout<<"Player 2 has won the battle!";
           break;
         }  
         PlayerSwitchMonster(PlayerTeam, Player);
-        DestroyMonster(PlayerTeam, Player);
       }
       else {
         continue;
@@ -188,22 +203,22 @@ void GameplayLoop(map<int, Monster> &PlayerTeam, Monster &Player,map<int, Monste
         PlayerBattleMenu(EnemyTeam,Enemy,Player); 
         if (Player.IsAlive() == false)
           cout<<Player.GetName()<<" has fainted!";
-          if (PlayerTeam.size() == 1) {
+          DestroyMonster(PlayerTeam, Player);
+          if (PlayerTeam.size() == 0) {
             cout<<"Player 2 has won the battle!"<<endl;
             break;
           }
           PlayerSwitchMonster(PlayerTeam, Player);
-          DestroyMonster(PlayerTeam, Player);
         }
         PlayerBattleMenu(PlayerTeam,Player,Enemy);
         if (Enemy.IsAlive() == false) {
           cout<<Enemy.GetName()<<" has fainted!";
-          if (EnemyTeam.size() == 1) {
+          DestroyMonster(EnemyTeam, Enemy);
+          if (EnemyTeam.size() == 0) {
             cout<<"Player has won the battle!"<<endl;
             break;
           }
           PlayerSwitchMonster(EnemyTeam, Enemy);
-          DestroyMonster(EnemyTeam, Enemy);
         }
         else {
         continue;
@@ -215,7 +230,7 @@ void MonsterSelection() {
   int NumberOfMonsters,NumberOfMonsters2,BattleType,SelectedMonster,Position = 1; 
   string MonsterTeam[] = {};
   map<int, Monster> MonsterList,Player1Monsters, Player2Monsters, BotMonsters; 
-  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Daggron)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)), MonsterList.insert(pair<int, Monster>(7,Nyrados)),MonsterList.insert(pair<int, Monster>(8,Tentadrool)),MonsterList.insert(pair<int, Monster>(9,Electafuzz)),MonsterList.insert(pair<int, Monster>(10,Rapdos)),MonsterList.insert(pair<int, Monster>(11,Blaziben)),MonsterList.insert(pair<int, Monster>(12,Raixen)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
+  MonsterList.insert(pair<int, Monster>(1,Pikacho)), MonsterList.insert(pair<int, Monster>(2,Charmanker)), MonsterList.insert(pair<int, Monster>(3,Dragonknight)), MonsterList.insert(pair<int, Monster>(4,Kingda)), MonsterList.insert(pair<int, Monster>(5,Drenchninja)), MonsterList.insert(pair<int, Monster>(6,Raygaza)), MonsterList.insert(pair<int, Monster>(7,Nyrados)),MonsterList.insert(pair<int, Monster>(8,Tentadrool)),MonsterList.insert(pair<int, Monster>(9,Electafuzz)),MonsterList.insert(pair<int, Monster>(10,Rapdos)),MonsterList.insert(pair<int, Monster>(11,Blaziben)),MonsterList.insert(pair<int, Monster>(12,Raixen)); // Monster objects are inserted into the MonsterList map alongside corresponding indentifying key numbers
   while (true) {
     cout<<"\nHow many monsters would you like to fight with?\n1 - One Monster\n3 - Three Monsters\n6 - Six Monsters\n";
     cin>>NumberOfMonsters;
@@ -232,17 +247,21 @@ void MonsterSelection() {
       cin.clear();
       cin.ignore();
       cout<<"Wrong data type entered! Try Again!\n";
+      // Wrong data type entered
     }
     else {
       cout<<"Invalid Number of Monsters! Try Again!\n";
+      // Number outside of range entered
     } 
   }
   NumberOfMonsters2 = NumberOfMonsters;
   cout<<"Here is the list of available monsters to choose:\n";
+  
   while (NumberOfMonsters > 0) {
     for (auto& pair : MonsterList) {
       cout<<pair.first<<" - "<<pair.second.GetName()<<" Type: "<<pair.second.GetType()<<endl;
         }
+    // Displays key,value from the map
     cout<<"Enter the number of the monster you'd like to choose! "<<NumberOfMonsters<<" choices remaining!"<<endl;
     cin>>SelectedMonster;
     auto it=MonsterList.find(SelectedMonster);
@@ -251,18 +270,22 @@ void MonsterSelection() {
       Player1Monsters.insert(pair<int, Monster>(Position,it->second));
       MonsterList.erase(SelectedMonster);
       Position++;
+      // If key is valid then number of monsters left is decremented and monster is inserted into the player's map and the key is removed from monsterlist and its position is incremented
     }
     else if (cin.fail()) {
       cin.clear();
       cin.ignore();
       cout<<"Invalid! Please select the number for which monster you would like to select\n"<<endl;
+      // Wrong data type entered
     }
     else {
       cout<<"That is not a valid Monster! Try Again!"<<endl;
+      // Number outside of range entered
     }
     for (auto& pair : Player1Monsters) {
       cout<<"Player1 Monster: "<<pair.second.GetName()<<"\n"<<endl;
         }
+    //Display Map
   }
   cout<<"All Choices have been made for Player 1's team!";
   Monster CurrentMonster = Player1Monsters.begin()->second;
@@ -274,28 +297,33 @@ void MonsterSelection() {
       int EnemySize = 0, EnemyNumber = 1;
       while (EnemySize < Player1Monsters.size()) {
         int NewNumber = GenerateNumber(1,12);
+        //Computer will randomly generate number in the range of keys and continue until equal to player map size
         auto it=MonsterList.find(NewNumber);
         if (it != MonsterList.end()) {
           BotMonsters.insert(pair<int, Monster>(EnemyNumber,it->second));
           MonsterList.erase(NewNumber);
           EnemySize++;
           EnemyNumber++;
+          //key and value is inserted into bot map
           cout<<"CPU Monster picked: "<<NewNumber<<endl;
               
         } 
         else {
           continue;
+          //It will continue to generate one until it finds one in the map
         } 
       }
       cout<<"The CPU Team has been selected here it is!\n"<<endl;
       for (auto& pair : BotMonsters) {
         cout<<"CPU Monster: "<<pair.second.GetName()<<"\n"<<endl;
           }
+      //Displays CPU team
       Monster OpponentMonster = BotMonsters.begin()->second;
       cout<<"Player 1's starting monster is: "<<endl;
       CurrentMonster.OutputStats();
       cout<<"Computer's starting monster is: "<<endl;
       OpponentMonster.OutputStats();
+      //Displays information on starting pokemon and runs gameplay function 
       GameplayLoop(Player1Monsters,CurrentMonster,BotMonsters,OpponentMonster,"PVE");   
       break;
     }
@@ -313,25 +341,30 @@ void MonsterSelection() {
             Player2Monsters.insert(pair<int, Monster>(Position,it->second));
             MonsterList.erase(SelectedMonster);
             Position++;
+            //Player 2 has the same selection process as player 1 inserted into their own map
             
           }
           else if (cin.fail()) {
             cin.clear();
             cin.ignore();
             cout<<"Invalid! Please select the number for which monster you would like to select\n"<<endl;
+            //wrong data type entered
           }
           else {
             cout<<"That is not a valid Monster! Try Again!"<<endl;
+            //Number outside range
           }
           for (auto& pair : Player2Monsters) {
             cout<<"Player2 Monster: "<<pair.second.GetName()<<"\n"<<endl;
               }
+          //Display player 2 map
       }
       Monster OpponentMonster = Player2Monsters.begin()->second;
       cout<<"Player 1's starting monster is: "<<endl;
       CurrentMonster.OutputStats();
       cout<<"Player 2's starting monster is: "<<endl;
       OpponentMonster.OutputStats();
+      //Dislay each starting monsters information and run gameplay loop 
       GameplayLoop(Player1Monsters,CurrentMonster,Player2Monsters,OpponentMonster,"PVP");
       break;
     }
@@ -339,9 +372,11 @@ void MonsterSelection() {
       cin.clear();
       cin.ignore();
       cout<<"Wrong data type! Try again!"<<endl;
+      //wrong data type entered
     }
     else {
       cout<<"Invalid Battle Type! Try Again!"<<endl;
+      //number outside range entered
     }
   }  
 }
@@ -376,7 +411,9 @@ void BattleIndex() {
       unsigned int curLine = 0;
       while(getline(TypingFile, Line)) {
           curLine++;
+          //Increment to the next line 
           if (Line.find(Search) != string::npos) {
+              //If search is found output line
               cout<<Line<<endl;
               found = true;
               break;
@@ -388,6 +425,7 @@ void BattleIndex() {
       TypingFile.close();
       if (found == false) {
         cout<<"Sorry that monster could not be found";
+        //If keyword is not found 
       }
       break;
     }
@@ -396,10 +434,12 @@ void BattleIndex() {
       cin.ignore();
       cout<<"Invalid! Wrong data type!\n\n\n"<<endl;
       continue;
+      //If invalid data type is entered
     }
     else {
       cout<<"Invalid Number! Try Again!\n\n\n"<<endl;
-      continue;
+      //If number out of range is entered
+      continue;      
     }
   }
 }
